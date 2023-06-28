@@ -1,0 +1,390 @@
+[
+    {
+        "id": "d5dce5238f7b9e0b",
+        "type": "websocket in",
+        "z": "9b2fa27882b9fb42",
+        "name": "モノプラットフォーム",
+        "server": "1b8204c6179f85ac",
+        "client": "",
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "c840c59fe195d748"
+            ]
+        ]
+    },
+    {
+        "id": "c840c59fe195d748",
+        "type": "json",
+        "z": "9b2fa27882b9fb42",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 370,
+        "y": 140,
+        "wires": [
+            [
+                "71fc4b4d99774a3a"
+            ]
+        ]
+    },
+    {
+        "id": "71fc4b4d99774a3a",
+        "type": "switch",
+        "z": "9b2fa27882b9fb42",
+        "name": "",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "keepalive",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "keepalive",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 490,
+        "y": 140,
+        "wires": [
+            [],
+            [
+                "58e7260eb18ed202"
+            ]
+        ]
+    },
+    {
+        "id": "58e7260eb18ed202",
+        "type": "function",
+        "z": "9b2fa27882b9fb42",
+        "name": "ペイロードを抽出",
+        "func": "// payloadの抽出\n\nlet payload = msg.payload.payload;\nlet value;\n\nfor (let i = 0; i < payload.length; i++) {\n  value = payload[i].value;\n}\n\nmsg.payload = {\n    value\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 160,
+        "wires": [
+            [
+                "1c18a028c4ee840e"
+            ]
+        ]
+    },
+    {
+        "id": "0444447c7937a590",
+        "type": "comment",
+        "z": "9b2fa27882b9fb42",
+        "name": "単純にpayloadを読みだす",
+        "info": "",
+        "x": 210,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "c5d2b76c37a1a64d",
+        "type": "comment",
+        "z": "9b2fa27882b9fb42",
+        "name": "keepaliveを無視する",
+        "info": "",
+        "x": 530,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "1c18a028c4ee840e",
+        "type": "function",
+        "z": "9b2fa27882b9fb42",
+        "name": "function 1",
+        "func": "// payloadをオブジェクトに変換\nlet payload = msg.payload.value\nlet data = JSON.parse(payload);\n\n// データは小数点1位で四捨五入\nlet temp = Math.floor(data.t * 10) / 10\nlet humi = Math.floor(data.h * 10) / 10\nlet pres = Math.floor(data.p * 10) / 10\n\nmsg.payload = {\n    temp,\n    humi,\n    pres\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 180,
+        "y": 280,
+        "wires": [
+            [
+                "9eed11899ede711d",
+                "a7a7098a8b56b7f5",
+                "1ca1c8b80deb61db",
+                "abd83adda9a110be",
+                "d3bb213df8472ec8"
+            ]
+        ]
+    },
+    {
+        "id": "d3bb213df8472ec8",
+        "type": "debug",
+        "z": "9b2fa27882b9fb42",
+        "name": "データ確認用",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "9eed11899ede711d",
+        "type": "change",
+        "z": "9b2fa27882b9fb42",
+        "name": "温度",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.temp",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 400,
+        "wires": [
+            [
+                "e326da2d6a8f2c2f"
+            ]
+        ]
+    },
+    {
+        "id": "a7a7098a8b56b7f5",
+        "type": "change",
+        "z": "9b2fa27882b9fb42",
+        "name": "湿度",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.humi",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 440,
+        "wires": [
+            [
+                "41dea766eee2b6b6"
+            ]
+        ]
+    },
+    {
+        "id": "1ca1c8b80deb61db",
+        "type": "change",
+        "z": "9b2fa27882b9fb42",
+        "name": "気圧",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.pres",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 480,
+        "wires": [
+            [
+                "407049f38a0c13a7"
+            ]
+        ]
+    },
+    {
+        "id": "e326da2d6a8f2c2f",
+        "type": "ui_gauge",
+        "z": "9b2fa27882b9fb42",
+        "name": "",
+        "group": "33fe7600ca499ff2",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "温度",
+        "label": "c",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "35",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 670,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "41dea766eee2b6b6",
+        "type": "ui_gauge",
+        "z": "9b2fa27882b9fb42",
+        "name": "",
+        "group": "33fe7600ca499ff2",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "湿度",
+        "label": "%RH",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 670,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "407049f38a0c13a7",
+        "type": "ui_gauge",
+        "z": "9b2fa27882b9fb42",
+        "name": "",
+        "group": "33fe7600ca499ff2",
+        "order": 3,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "気圧",
+        "label": "hPa",
+        "format": "{{value}}",
+        "min": "870",
+        "max": "1040",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 670,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "abd83adda9a110be",
+        "type": "influxdb out",
+        "z": "9b2fa27882b9fb42",
+        "influxdb": "1c2043316089f56a",
+        "name": "",
+        "measurement": "environdata1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 580,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b048ba0fa60af49b",
+        "type": "comment",
+        "z": "9b2fa27882b9fb42",
+        "name": "データベースに保存",
+        "info": "",
+        "x": 490,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "affeca49d0f738ba",
+        "type": "comment",
+        "z": "9b2fa27882b9fb42",
+        "name": "Node-REDダッシュボードで可視化",
+        "info": "",
+        "x": 540,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "1b8204c6179f85ac",
+        "type": "websocket-listener",
+        "path": "",
+        "wholemsg": "false"
+    },
+    {
+        "id": "33fe7600ca499ff2",
+        "type": "ui_group",
+        "name": "環境センサー",
+        "tab": "91026bcf87ed2cda",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1c2043316089f56a",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "EnvironData",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true,
+        "credentials": {
+            "username": "",
+            "password": "",
+            "token": ""
+        }
+    },
+    {
+        "id": "91026bcf87ed2cda",
+        "type": "ui_tab",
+        "name": "環境センサー",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
