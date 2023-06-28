@@ -1,0 +1,2 @@
+# monoplatformSampleApplication
+モノプラットフォームのサンプルアプリケーションを作成します。
