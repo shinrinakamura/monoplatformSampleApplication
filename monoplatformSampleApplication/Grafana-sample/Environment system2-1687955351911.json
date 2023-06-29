@@ -579,10 +579,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "e8f672d0-7bd4-468f-917c-ade5530ce969"
-      },
+      "datasource": {},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -595,10 +592,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -689,6 +682,6 @@
   "timezone": "",
   "title": "Environment system2",
   "uid": "dab42345-204f-472b-acce-bc1382a2260d",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
